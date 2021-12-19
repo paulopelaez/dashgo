@@ -18,7 +18,7 @@ export function Header() {
       align="center"
     >
       <Text fontSize="3xl" fontWeight="bold" letterSpacing="tight" w="64">
-        dashGo
+        QueryWork
         <Text as="span" ml="1" color="purple.500">
           .
         </Text>
