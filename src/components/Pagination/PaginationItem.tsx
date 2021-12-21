@@ -14,15 +14,12 @@ export function PaginationItem({
       size="sm"
       fontSize="xs"
       width="4"
-      colorSchema="purple"
+      colorScheme="purple"
       disabled
       _disabled={{
         bg: "purple.500",
         cursor: "default",
         _hover: "purple.500",
-      }}
-      _hover={{
-        bg: "purple.500",
       }}
     >
       {number}
