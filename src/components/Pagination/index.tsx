@@ -8,7 +8,7 @@ interface paginationProps {
   onPageChange: (page: number) => void;
 }
 
-const siblingsCount = 1;
+const siblingsCount = 2;
 
 function generatePagesArray(from: number, to: number) {
   return [...new Array(to - from)]

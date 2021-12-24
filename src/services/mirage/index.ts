@@ -3,6 +3,7 @@ import faker from "faker";
 
 type User = {
   name: string;
+  avatar: string;
   email: string;
   created_at: string;
 };
@@ -18,6 +19,9 @@ export function makeServer() {
         name(i) {
           //return `Pelaez ${i + 1}`;
           return `${faker.name.firstName()} ${faker.name.lastName()}`;
+        },
+        avatar(i) {
+          return `https://i.pravatar.cc/50?img=${i > 70 ? 70 : i}`;
         },
         email() {
           return faker.internet.email().toLowerCase();
@@ -59,6 +63,7 @@ export function makeServer() {
           { users }
         );
       });
+      this.get("/users/:id");
       this.post("/users");
 
       this.namespace = "";

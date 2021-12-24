@@ -5,6 +5,7 @@ type User = {
   id: string;
   name: string;
   email: string;
+  avatar: string;
   createdAt: string;
 };
 
@@ -27,6 +28,7 @@ export async function getUsers(page: number): Promise<GetUserResponse> {
       id: user.id,
       name: user.name,
       email: user.email,
+      avatar: user.avatar,
       createdAt: new Date(user.createdAt).toLocaleDateString("pt-BR", {
         day: "2-digit",
         month: "short",
@@ -43,6 +45,6 @@ export async function getUsers(page: number): Promise<GetUserResponse> {
 
 export function useUsers(page: number) {
   return useQuery(["users", page], () => getUsers(page), {
-    staleTime: 1000 * 5, //5 seconds
+    staleTime: 1000 * 60 * 10, // 10 minutes
   });
 }

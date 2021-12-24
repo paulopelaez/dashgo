@@ -2,6 +2,7 @@ import {
   Alert,
   AlertIcon,
   AlertTitle,
+  Avatar,
   Box,
   Button,
   Checkbox,
@@ -10,6 +11,7 @@ import {
   Icon,
   IconButton,
   Spinner,
+  Stack,
   Table,
   Tbody,
   Td,
@@ -18,14 +20,18 @@ import {
   Thead,
   Tr,
   useBreakpointValue,
+  VStack,
 } from "@chakra-ui/react";
+import { m } from "framer-motion";
 import Link from "next/link";
 import { useState } from "react";
 import { RiAddLine, RiPencilLine, RiRefreshLine } from "react-icons/ri";
 import { Header } from "../../components/Header";
 import { Pagination } from "../../components/Pagination";
 import { Sidebar } from "../../components/Sidebar";
+import { api } from "../../services/api";
 import { useUsers } from "../../services/hooks/useUsers";
+import { queryClient } from "../../services/queryClient";
 
 export default function UserList() {
   const [page, setPage] = useState(1);
@@ -35,6 +41,20 @@ export default function UserList() {
     base: false,
     lg: true,
   });
+
+  async function handlePrefetchUser(userId: string) {
+    await queryClient.prefetchQuery(
+      ["user", userId],
+      async () => {
+        const response = await api.get(`users/${userId}`);
+
+        return response.data;
+      },
+      {
+        staleTime: 1000 * 60 * 10, // 10 minutes
+      }
+    );
+  }
 
   return (
     <Box>
@@ -108,12 +128,19 @@ export default function UserList() {
                           <Checkbox colorScheme="purple" />
                         </Td>
                         <Td>
-                          <Box>
-                            <Text fontWeight="bold">{user.name}</Text>
-                            <Text fontSize="sm" color="gray.300">
-                              {user.email}
-                            </Text>
-                          </Box>
+                          <Flex align="center">
+                            <Flex>
+                              <Avatar name={user.name} src={user.avatar} />
+                            </Flex>
+                            <Flex ml="3">
+                              <Stack spacing="1">
+                                <Text fontWeight="bold">{user.name}</Text>
+                                <Text fontSize="sm" color="gray.300">
+                                  {user.email}
+                                </Text>
+                              </Stack>
+                            </Flex>
+                          </Flex>
                         </Td>
                         {isWideVersion && <Td> {user.createdAt}</Td>}
                         <Td>
@@ -122,6 +149,7 @@ export default function UserList() {
                             size="sm"
                             fontSize="sm"
                             colorScheme="purple"
+                            onMouseEnter={() => handlePrefetchUser(user.id)}
                             leftIcon={<Icon as={RiPencilLine} fontSize="16" />}
                           >
                             Editar
